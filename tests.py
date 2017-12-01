@@ -109,6 +109,20 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(r[1][0], 'blah')
         self.assertEqual(r[1][1], 'blob')
 
+    def test_process_animation_macros(self):
+        g = Generator(os.path.join(DATA_DIR, 'test.md'))
+
+        r = g.process_macros('''<ul class="xx">
+<li>Markdown .fx:rollIn</li>
+<li>ReStructured Text</li>
+<li>Textile</li>
+</ul>''')
+        self.assertEqual(r[0], '''<ul class="rollIn xx">
+<li class="building">Markdown </li>
+<li class="tobuild">ReStructured Text</li>
+<li class="tobuild">Textile</li>
+</ul>''')
+
     def test_register_macro(self):
         g = Generator(os.path.join(DATA_DIR, 'test.md'))
 

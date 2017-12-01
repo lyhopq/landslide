@@ -488,6 +488,26 @@ aside {
     font-size: 90%;
 }
 
+.rollIn .tobuild {
+  opacity: 0;
+  visibility: hidden;
+  -moz-transform: rotateX(90deg);
+  -ms-transform: rotateX(90deg);
+  -webkit-transform: rotateX(90deg);
+  transform: rotateX(90deg);
+}
+.rollIn > * {
+  -moz-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+
+div.slide {
+  background: url('background.png') bottom center no-repeat;
+  background-color: #eee;
+}
+
 /* Pygments default theme */
 .hll { background-color: #ffffcc }
 .c { color: #408080; font-style: italic } /* Comment */

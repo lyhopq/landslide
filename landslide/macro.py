@@ -141,6 +141,33 @@ class FxMacro(Macro):
 
         return content, classes
 
+class SingleLineAnimationMacro(Macro):
+    """Adds single line animation to slides"""
+
+    fx_blocks_re = re.compile(
+        r'(<((ul|ol)[^>]*)>.*?\s+\.fx:([^<]+).+?</\3>)',
+        re.UNICODE | re.MULTILINE | re.DOTALL)
+
+    def process(self, content, source=None):
+        classes = []
+        fx_blocks = self.fx_blocks_re.findall(content)
+        if not fx_blocks:
+            return content, []
+
+        count = 0
+        for block, tag_all, tag, fxs in fx_blocks:
+            if tag_all.count('class="'):
+                fx_tag_all = tag_all.replace('class="', 'class="{} '.format(fxs), 1)
+                fx_block = block.replace(tag_all, fx_tag_all, 1)
+            else:
+                fx_block = block.replace('<{}'.format(tag), '<{} class="{}"'.format(tag, fxs), 1)
+            fx_block = fx_block.replace(
+                '.fx:{}'.format(fxs), '', 1).replace(
+                '<li>', '<li class="building">' if count == 0 else '<li class="tobuild">', 1).replace(
+                '<li>', '<li class="tobuild">')
+            content = content.replace(block, fx_block, 1)
+            count = count + 1
+        return content, classes
 
 class NotesMacro(Macro):
     """Adds toggleable notes to slides"""

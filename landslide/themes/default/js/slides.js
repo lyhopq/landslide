@@ -166,7 +166,64 @@ function main() {
         w.postMessage('slide#' + currentSlideNo, '*');
     };
 
+    function buildNextItem() {
+        if (currentSlideNo >= slides.length) {
+            return false;
+        }
+        var curSlide = slides[currentSlideNo-1];
+        var subBuilded = curSlide.getElementsByClassName('building');
+        var list;
+        if (subBuilded.length) {
+            for (var i = 0, len = subBuilded.length; i < len; i++) {
+              list = subBuilded.item(i).classList;
+              list.remove('building');
+              list.add('builded');
+            }
+        }
+        var toBuild = curSlide.getElementsByClassName('tobuild');
+        if (!toBuild.length) {
+            return false;
+        }
+        var item = toBuild.item(0);
+        list = item.classList;
+        list.remove('tobuild');
+        list.add('building');
+        return true;
+    }
+    function buildPrevItem() {
+        if (currentSlideNo >= slides.length) {
+            return false;
+        }
+        var curSlide = slides[currentSlideNo-1];
+        var subBuilded = curSlide.getElementsByClassName('building');
+        var list;
+        if (subBuilded.length) {
+            for (var i = 0, len = subBuilded.length; i < len; i++) {
+              list = subBuilded.item(i).classList;
+              list.remove('building');
+              list.add('tobuild');
+            }
+        }
+        var builded = curSlide.getElementsByClassName('builded');
+        if (builded.length <= 1) {
+            return false;
+        }
+        var item = builded.item(builded.length - 1)
+        if (item) {
+            list = item.classList;
+            list.remove('builded');
+            if (subBuilded.length === 0) {
+                list.add('tobuild');
+            } else {
+                list.add('building');
+            }
+        }
+        return true;
+    }
     var nextSlide = function() {
+        if (buildNextItem()) {
+            return;
+        }
         if (currentSlideNo < slides.length) {
             currentSlideNo++;
         }
@@ -174,6 +231,9 @@ function main() {
     };
 
     var prevSlide = function() {
+        if (buildPrevItem()) {
+            return;
+        }
         if (currentSlideNo > 1) {
             currentSlideNo--;
         }

@@ -33,6 +33,7 @@ class Generator(object):
         macro_module.CodeHighlightingMacro,
         macro_module.EmbedImagesMacro,
         macro_module.FixImagePathsMacro,
+        macro_module.SingleLineAnimationMacro,
         macro_module.FxMacro,
         macro_module.NotesMacro,
         macro_module.QRMacro,
