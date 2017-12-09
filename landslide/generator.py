@@ -330,22 +330,24 @@ class Generator(object):
 
         return css
 
-    def get_js(self):
+    def get_js(self, name):
         """ Fetches and returns javascript file path or contents, depending if
             we want a standalone presentation or not.
         """
-        js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
-
+        js_file = os.path.join(self.theme_dir, 'js', name)
         if not os.path.exists(js_file):
-            js_file = os.path.join(THEMES_DIR, 'default', 'js', 'slides.js')
-
+            js_file = os.path.join(THEMES_DIR, 'default', 'js', name)
             if not os.path.exists(js_file):
-                raise IOError(u"Cannot find slides.js in default theme")
+                raise IOError(u"Cannot find {0} in default theme".format(name))
         with codecs.open(js_file, encoding=self.encoding) as js_file_obj:
             return {
                 'path_url': utils.get_path_url(js_file, self.relative),
                 'contents': js_file_obj.read(),
             }
+
+    def get_all_js(self):
+        js_files = ['slides.js', 'jquery.js', 'jcanvas.js']
+        return map(lambda js_file: self.get_js(js_file), js_files)
 
     def get_slide_vars(self, slide_src, source=None):
         """ Computes a single slide template vars from its html source code.
@@ -416,7 +418,7 @@ class Generator(object):
 
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
-                'css': self.get_css(), 'js': self.get_js(),
+                'css': self.get_css(), 'js': self.get_all_js(),
                 'user_css': self.user_css, 'user_js': self.user_js,
                 'math_output': self.math_output}
 

@@ -49,13 +49,15 @@
     {% endfor %}
     <!-- /Styles -->
     <!-- Javascripts -->
-    {% if embed %}
-    <script>
-      {{ js.contents }}
-    </script>
-    {% else %}
-    <script type="text/javascript" src="{{ js.path_url }}"></script>
-    {% endif %}
+    {% for _js in js %}
+      {% if embed %}
+      <script>
+        {{ _js.contents }}
+      </script>
+      {% else %}
+      <script type="text/javascript" src="{{ _js.path_url }}"></script>
+      {% endif %}
+    {% endfor %}
     {% for js in user_js %}
       {% if embed %}
       <script>
@@ -116,6 +118,7 @@
       </div>
       {% endfor %}
     </div>
+    <canvas id="drawBoard" class="draw-board" width="0" height="1200"></canvas>
   </div>
   {% if toc %}
   <div id="toc" class="sidebar hidden">

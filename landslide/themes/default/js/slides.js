@@ -220,7 +220,9 @@ function main() {
         }
         return true;
     }
+
     var nextSlide = function() {
+        removePaint();
         if (buildNextItem()) {
             return;
         }
@@ -229,8 +231,8 @@ function main() {
         }
         updateSlideClasses(true);
     };
-
     var prevSlide = function() {
+        removePaint();
         if (buildPrevItem()) {
             return;
         }
@@ -517,6 +519,9 @@ function main() {
             case 84: // t
                 showToc();
                 break;
+            case 87: // w
+                drawPen();
+                break;
         }
     };
 
@@ -599,6 +604,83 @@ function main() {
             }
         }
     };
+
+    var layer=0;
+    var isDraw = 0;
+    CanvasExt={
+        drawPen:function(canvasId,penColor,penWidth){
+                    var that=this;
+                    that.penColor=penColor;
+                    that.penWidth=penWidth;
+                    var canvas=document.getElementById(canvasId);
+                    canvas.setAttribute("width", 1200);
+                    var canvasRect = canvas.getBoundingClientRect();
+                    var canvasLeft=canvasRect.left;
+                    var canvasTop=canvasRect.top;
+                    var sourceX=0;
+                    var sourceY=0;
+                    var layerIndex=layer;
+                    var layerName="layer";
+                    canvas.onmousedown=function(e){
+                        var color=that.penColor;
+                        var width=that.penWidth;
+                        sourceX=e.clientX-canvasLeft;       
+                        sourceY=e.clientY-canvasTop;        
+                        canvas.onmousemove=function(e){
+                            layerIndex++;
+                            layer++;
+                            layerName+=layerIndex;
+                            var currX=e.clientX-canvasLeft;
+                            var currY=e.clientY-canvasTop;
+                            $("#"+canvasId).drawLine({
+                              layer:true,
+                              name:layerName,
+                              strokeStyle: color,
+                              strokeWidth: width,
+                              x1: sourceX, y1: sourceY,
+                              x2: currX,
+                              y2: currY
+                            });
+                            sourceX=currX;
+                            sourceY=currY;
+                        }
+                    }
+                    canvas.onmouseup=function(e){
+                            canvas.onmousemove=null;
+                        }
+            },
+             setPenColor:function(penColor){
+                   this.penColor=penColor;
+              },
+              setPenWidth:function(width){
+                   this.penWidth=width;
+               },
+            removePaint:function(canvasId){
+                $('#'+canvasId).attr("width", 0);
+                $('#'+canvasId).removeLayers();
+                $('#'+canvasId).clearCanvas();
+            layer = 0;
+            var canvas=document.getElementById(canvasId);
+            canvas.onmousedown = null;
+            canvas.onmouseup = null;
+            canvas.onmousemove = null;
+        }
+    };
+    function drawPen(){
+        if(isDraw)
+        {
+            removePaint();
+            return;
+        }
+        isDraw = 1;
+        var color = 'rgba(255,0,0,0.5)';
+        var width= 3;
+        CanvasExt.drawPen("drawBoard",color,width);
+    }
+    function removePaint() {
+        isDraw = 0;
+        CanvasExt.removePaint("drawBoard");
+    }
 
     // initialize
 
