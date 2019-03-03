@@ -22,13 +22,22 @@ setup(
         'restructuredtext',
         'textile'
     ],
-    install_requires=['Jinja2', 'Markdown', 'Pygments', 'docutils', 'six'],
+    install_requires=[
+        'Jinja2==2.10',
+        'Markdown==2.6.11',
+        'Pygments==2.2.0',
+        'docutils==0.14',
+        'six==1.11.0'
+    ],
     classifiers=[
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.5',
-        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Development Status :: 4 - Beta',
         'Operating System :: OS Independent',
         'License :: OSI Approved :: Apache Software License',
